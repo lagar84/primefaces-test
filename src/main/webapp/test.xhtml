@@ -10,9 +10,50 @@
     </h:head>
     <h:body>
 
-        <h1>#{testView.testString}</h1>
-
-        <h1>#{testViewCdi.testString}</h1>
+        <h3>Steps to reproduce the problem:</h3>
+        <ol>
+        	<li>Check all records on both tables (click on all checkboxes)</li>
+        	<li>Click on Submit ALL button</li>
+        	<li>BUG: Only the last table values are shown</li>        
+        </ol>
+        
+        <h:form>
+        	<p:repeat var="par" value="#{testView.parents}">
+	        	<p:dataTable id="parTable" value="#{par.children}" var="rec" rowKey="#{rec.id}"
+			 		 selection="#{par.childrenSelected}" rowSelectMode="checkbox">
+					 
+					 <p:column selectionMode="multiple" style="width: 50px; text-align:center;" />
+				     
+				     <p:column headerText="ID" style="width: 100px;">
+				     	<h:outputText value="#{rec.id}" />
+				     </p:column>
+				     <p:column headerText="Name" >
+				     	<h:outputText value="#{rec.name}" />
+				     </p:column>
+					 
+				</p:dataTable>
+				<br/>
+			</p:repeat>
+			<br/>
+			<br/>
+			
+			<p:commandButton value="Submit ALL" process="@form" update="@form"/>
+			
+			<br/>
+			<br/>
+			<h3>You selected:</h3>
+			<p:repeat var="parSel" value="#{testView.parents}">
+				<p:repeat var="chSel" value="#{parSel.childrenSelected}">
+				
+					<h:outputText value="#{chSel.id}" />
+					<h:outputText value=" - " />
+					<h:outputText value="#{chSel.name}" />
+					<br/>
+				
+				</p:repeat>
+			</p:repeat>
+        
+        </h:form>
 
     </h:body>
 </html>
