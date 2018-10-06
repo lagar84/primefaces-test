@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
+
+    <h:head>
+        <title>PrimeFaces Test</title>
+    </h:head>
+    <h:body>
+
+		<h3>Problem:</h3>
+		<p>After the first enabled confirmDialog (disabled=false), the remaing rows that are disabled will assume the previous row value.
+		</p>
+
+        <h3>Steps to reproduce the problem:</h3>
+        <ol>
+        	<li>In the first row, click on "click me" link. disabled evaluates to true, and it will not show confirmDialog. Below dataTable will appear the message "You clicked: Mojarra". So far so good.</li>
+        	<li>On the second row, disabled evaluates to false, so the confirmDialog will appear. Click yes. Below dataTable will appear "You clicked: Myfaces". OK</li>
+        	<li>Click on the fifth row (Spring). It will show a confirmDialog, but it should not. Click yes. Below dataTable, will appear <b>"You clicked: Hibernate"</b> Note that the fourth row assume the fifth row place.</li>        
+        </ol>
+        
+        <p:confirmDialog id="globalConfirmDialog" global="true" closeOnEscape="true" >
+			<p:commandButton value="Yes"  type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+       		<p:commandButton value="No"   type="button" styleClass="ui-confirmdialog-no"  icon="ui-icon-close"/>       
+		</p:confirmDialog> 
+        
+        <h:form>
+        	
+        	<p:dataTable id="dTable" value="#{testConfirmView.rows}" var="rec" >
+				 
+				 <p:column headerText="Action">
+				 	<p:commandLink process="@form" update="@form" value="click me">
+				 		<f:setPropertyActionListener value="#{rec}" target="#{testConfirmView.selRow}" />
+						<p:confirm header="Confirm" message="You will click #{rec.name}. Proceed?" icon="ui-icon-alert" disabled="#{not rec.showConfirm}" />
+					</p:commandLink>
+				 </p:column>
+				 			 
+				 <p:column headerText="Should show confirm dialog?" style="width: 200px;">
+			     	<h:outputText value="#{rec.showConfirm}" />
+			     </p:column>
+				 			     
+			     <p:column headerText="ID" style="width: 100px;">
+			     	<h:outputText value="#{rec.id}" />
+			     </p:column>
+			     
+			     <p:column headerText="Name" >
+			     	<h:outputText value="#{rec.name}" />
+			     </p:column>
+				 
+			</p:dataTable>
+				
+			<br/>
+			<br/>
+			
+			<h:outputText value="You clicked: #{testConfirmView.selRow.name}" />
+			
+        </h:form>
+
+    </h:body>
+</html>
