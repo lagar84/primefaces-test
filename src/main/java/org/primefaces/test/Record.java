@@ -31,5 +31,8 @@ public class Record {
 		this.name = name;
 	}
 	
+	public boolean isShowConfirm() {
+		return id % 2 == 0;
+	}
 	
 }
