@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <h:head>
+        <title>PrimeFaces Test</title>
+    </h:head>
+    <h:body>
+
+		<h3>Problem:</h3>
+		<p>In reflow mode, user select a column to sort using the selectOneMenu. Wrong label appear on selectOneMenu
+		</p>
+
+        <h3>Steps to reproduce the problem:</h3>
+        <ol>
+        	<li>Resize your browser window to 640px or less, to enter reflow mode.</li>
+        	<li>Select to Sort by ID Descending</li>
+        	<li>After ajax execution, the selected option will mark 'Name Descending', not reflecting the actual column user choosed.</li>        
+        </ol>
+                
+        <h:form>
+        	
+        	<p:dataTable id="dTable" value="#{testReflowSortView.rows}" reflow="true" var="rec" >
+				 
+				 <p:column headerText="Action">
+				 	<p:commandLink process="@form" update="@form" value="click me">
+				 		<f:setPropertyActionListener value="#{rec}" target="#{testReflowSortView.selRow}" />
+					</p:commandLink>
+				 </p:column>
+				 			 
+			     <p:column headerText="ID" sortBy="#{rec.id}">
+			     	<h:outputText value="#{rec.id}" />
+			     </p:column>
+			     
+			     <p:column headerText="Name" sortBy="#{rec.name}" >
+			     	<h:outputText value="#{rec.name}" />
+			     </p:column>
+				 
+			</p:dataTable>
+				
+			<br/>
+			<br/>
+			
+			<h:outputText value="You clicked: #{testReflowSortView.selRow.name}" />
+			
+        </h:form>
+
+    </h:body>
+</html>
